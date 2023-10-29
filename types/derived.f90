@@ -1,9 +1,9 @@
-module m_shapes
+module shapes3d
   implicit none
   private
-  public t_square
+  public cube
 
-  type :: t_square
+  type :: cube
   real :: side
   contains
     procedure :: area  ! procedure declaration
@@ -12,19 +12,19 @@ module m_shapes
 contains
 
   ! Procedure definition
-  real function area(self) result(res)
-    class(t_square), intent(in) :: self
-    res = self%side**2
+  real function volume(self) result(res)
+    class(cube), intent(in) :: self
+    res = self%side**3
   end function
 
 end module m_shapes
 
 program main
-  use m_shapes
+  use shapes3d
   implicit none
 
   ! Variables' declaration
-  type(t_square) :: sq
+  type(cube) :: sq
   real :: x, side
 
   ! Variables' initialization
