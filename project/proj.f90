@@ -2,18 +2,33 @@ module shapes3d
   implicit none
   private
   public t_cube
+  public t_cylinder
+
+  real :: pi = acos(-1.0)
 
   type :: t_cube
   real :: side
   contains
-    procedure :: volume
+    procedure :: cube_volume
+  end type
+  
+  type :: t_cylinder
+  real :: height
+  real :: radius
+  contains
+    procedure :: cylinder_volume
   end type
 
 contains
 
-  real function volume(self) result(res)
+  real function cube_volume(self) result(res)
     class(t_cube), intent(in) :: self
     res = self%side**3
+  end function
+
+  real function cylinder_volume(self) result(res)
+    class(t_cylinder), intent(in) :: self
+    res = self%radius**2 * self%height * pi
   end function
 
 end module shapes3d
@@ -59,13 +74,15 @@ program main
   integer :: shape_id
   character :: ans
   type(t_cube) :: cube
-  real :: vol, side
+  type(t_cylinder) :: cylinder
+  real :: vol, side, radius, height
 
   print *, 'Welcome to this program for the scientific computing!'
   
   outer_loop: do 
     print *, 'Here are all the shapes you can compute volume for:'
     print *, '1 - Cube'
+    print *, '2 - Cylinder'
     print *, 'Pleace enter id of the shepe you`d like to compute volume for:'
   
     read(*,*) shape_id
@@ -79,7 +96,32 @@ program main
 
       cube%side = side
 
-      vol = cube%volume()
+      vol = cube%cube_volume()
+
+      print *, 'Volume of your shape is:', vol
+
+      do_exit = inner()
+
+      if (do_exit) then
+        exit outer_loop
+      else
+        cycle outer_loop
+      end if
+    
+    elseif (shape_id == 2) then
+      print *, 'You`ve chosen cylinder. Pleace enter it`s height. (e.g. 1.0):'
+
+      read(*,*) height
+
+      cylinder%height = height
+    
+      print *, 'Pleace enter it`s radius. (e.g. 1.0):'
+
+      read(*,*) radius
+
+      cylinder%radius = radius
+
+      vol = cylinder%cylinder_volume()
 
       print *, 'Volume of your shape is:', vol
 
